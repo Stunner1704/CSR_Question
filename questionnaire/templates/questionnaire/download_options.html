@@ -1,0 +1,79 @@
+{% extends "questionnaire/base.html" %}
+{% load static %}
+
+{% block title %}Download Options{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header py-3">
+        <h2 class="h4 mb-0"><i class="bi bi-download me-2"></i>Download Questionnaire</h2>
+    </div>
+    
+    <div class="card-body p-4 p-md-5">
+        <div class="alert alert-info">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-2">{{ respondent.name }}</h5>
+                    <p class="mb-1"><strong>Profession:</strong> {{ respondent.get_profession_display }}</p>
+                    <p class="mb-0"><strong>Application ID:</strong> <code>{{ respondent.application_id }}</code></p>
+                </div>
+                <span class="badge bg-primary rounded-pill">
+                    <i class="bi bi-shield-lock me-1"></i>Verified
+                </span>
+            </div>
+        </div>
+        
+        <h4 class="mb-4 text-center">Select Download Option</h4>
+        
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="card h-100 border-primary">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-4">
+                            <i class="bi bi-file-earmark-text-fill text-primary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h3 class="h5">Full Questionnaire</h3>
+                        <p class="text-muted mb-4">Complete set of all questions in a single document</p>
+                        {% if not respondent.full_downloaded and not respondent.download_completed %}
+                            <a href="{% url 'download_full' respondent.application_id %}" class="btn btn-primary w-100 py-2">
+                                <i class="bi bi-download me-1"></i>Download PDF
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary w-100 py-2" disabled>
+                                <i class="bi bi-check-circle me-1"></i>Already Downloaded
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100 border-secondary">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-4">
+                            <i class="bi bi-collection-fill text-secondary" style="font-size: 3rem;"></i>
+                        </div>
+                        <h3 class="h5">Section-wise Questionnaire</h3>
+                        <p class="text-muted mb-4">Download specific sections of the questionnaire</p>
+                        {% if not respondent.download_completed %}
+                            <a href="{% url 'section_b' respondent.application_id %}" class="btn btn-outline-secondary w-100 py-2">
+                                <i class="bi bi-list-ul me-1"></i>Select Sections
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary w-100 py-2" disabled>
+                                <i class="bi bi-check-circle me-1"></i>Already Downloaded
+                            </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-5">
+            <a href="{% url 'home' %}" class="btn btn-outline-primary">
+                <i class="bi bi-house-door me-1"></i>Return to Home Page
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

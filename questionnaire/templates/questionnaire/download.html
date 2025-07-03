@@ -1,0 +1,44 @@
+{% extends "questionnaire/base.html" %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h2>Download Questionnaire</h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100 section-card">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h3 class="card-title">Full Questionnaire</h3>
+                        <p class="card-text flex-grow-1">
+                            Complete set of all questions in a single document
+                        </p>
+                        <div class="mt-auto">
+                            <!-- Updated URL reference -->
+                            <a href="{{ download_full_url }}" class="btn btn-download">
+                                Download Full PDF
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100 section-card">
+                    <div class="card-body text-center d-flex flex-column">
+                        <h3 class="card-title">Section-wise Questionnaire</h3>
+                        <p class="card-text flex-grow-1">
+                            Download specific sections of the questionnaire
+                        </p>
+                        <div class="mt-auto">
+                            <a href="{% url 'section_b' %}" class="btn btn-primary">
+                                Select Sections
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

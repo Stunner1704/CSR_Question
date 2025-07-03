@@ -1,0 +1,59 @@
+{% extends "questionnaire/base.html" %}
+{% load widget_tweaks %}
+
+{% block title %}Upload Response{% endblock %}
+
+{% block content %}
+<div class="card shadow">
+    <div class="card-header py-3 bg-primary text-white">
+        <h2 class="h4 mb-0"><i class="bi bi-cloud-upload me-2"></i>Upload Response</h2>
+    </div>
+    
+    <div class="card-body p-4 p-md-5">
+        <div class="alert alert-info">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-2">{{ respondent.name }}</h5>
+                    <p class="mb-0"><strong>Application ID:</strong> <code>{{ respondent.application_id }}</code></p>
+                </div>
+                <span class="badge bg-primary rounded-pill">
+                    <i class="bi bi-shield-check me-1"></i>Verified
+                </span>
+            </div>
+        </div>
+        
+        <div class="mb-5">
+            <h4 class="mb-3">Upload Instructions</h4>
+            <ol class="list-group list-group-numbered">
+                <li class="list-group-item">Complete the downloaded questionnaire</li>
+                <li class="list-group-item">Save the PDF with your answers</li>
+                <li class="list-group-item">Upload the completed PDF file below</li>
+                <!-- <li class="list-group-item">You'll receive a verification email</li> -->
+            </ol>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>Error:</strong> Please correct the errors below.
+                </div>
+            {% endif %}
+            
+            <div class="mb-4">
+                <label for="{{ form.pdf_file.id_for_label }}" class="form-label fw-bold">
+                    <i class="bi bi-file-pdf me-1"></i> Select Completed Questionnaire
+                </label>
+                {% render_field form.pdf_file class="form-control" %}
+                <div class="form-text">Only PDF files accepted (max 10MB)</div>
+            </div>
+            
+            <div class="d-grid mt-5">
+                <button type="submit" class="btn btn-primary btn-lg py-3">
+                    <i class="bi bi-upload me-2"></i>Upload Response
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

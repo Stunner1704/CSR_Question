@@ -1,0 +1,27 @@
+{% extends "questionnaire/base.html" %}
+
+{% block content %}
+<div class="card shadow text-center">
+    <div class="card-body p-5">
+        <div class="mb-4">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+        </div>
+        <h2 class="mb-3">Preparing your download...</h2>
+        <p class="lead">Your questionnaire download should start automatically.</p>
+        <p>If it doesn't, <a href="{{ download_url }}" id="download-link">click here</a>.</p>
+    </div>
+</div>
+<script>
+    // Automatically trigger the download
+    setTimeout(function() {
+        window.location.href = "{{ download_url }}";
+    }, 100);
+
+    // Redirect to final page after 5 seconds
+    setTimeout(function() {
+        window.location.href = "{{ redirect_url }}";
+    }, 5000);
+</script>
+{% endblock %}
