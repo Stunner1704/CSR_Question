@@ -19,6 +19,9 @@ from .forms import UploadVerificationForm, ResponseUploadForm
 from .models import ResponsePDF
 from django.contrib import messages
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 def home(request):
     return render(request, 'questionnaire/home.html')
@@ -27,21 +30,6 @@ def set_language(request, language):
     request.session['language'] = language
     return redirect('home')
 
-# def section_a(request):
-#     if request.method == 'POST':
-#         form = RespondentForm(request.POST)
-#         if form.is_valid():
-#             respondent = form.save()
-#             return redirect('download_options', application_id=respondent.application_id)
-#     else:
-#         form = RespondentForm()
-#     return render(request, 'questionnaire/section_a.html', {'form': form})
-
-# def download_options(request, application_id):
-#     respondent = get_object_or_404(Respondent, application_id=application_id)
-#     return render(request, 'questionnaire/download_options.html', {
-#         'respondent': respondent
-#     })
 
 def section_a(request):
     if request.method == 'POST':
@@ -57,6 +45,9 @@ def section_a(request):
 
 
 def download_options(request, application_id):
+    # Validate application ID format
+    if not (application_id.isdigit() and len(application_id) == 8):
+        raise Http404("Invalid application ID format")
     # Check mobile verification
     verified_mobile = request.session.get('verified_mobile')
     if not verified_mobile:
@@ -88,7 +79,6 @@ def verify_mobile(request):
             messages.error(request, "No registration found with this mobile number. Please check your number or register first.")
     
     return redirect('home')
-
 
 def section_b(request, application_id):
     respondent = get_object_or_404(Respondent, application_id=application_id)
@@ -345,50 +335,6 @@ def generate_section_pdf(respondent, section_key):
     p.save()
     return buffer.getvalue()
 
-# def download_full_pdf(request, application_id):
-#     respondent = get_object_or_404(Respondent, application_id=application_id)
-    
-#     # Check if already downloaded
-#     if respondent.full_downloaded:
-#         return HttpResponse("Full questionnaire has already been downloaded.", status=403)
-    
-#     # Mark as downloaded
-#     respondent.full_downloaded = True
-#     respondent.save()
-    
-#     # Generate PDF content
-#     pdf_content = generate_full_pdf(respondent)
-    
-#     # Create response with PDF download
-#     response = HttpResponse(pdf_content, content_type='application/pdf')
-#     response['Content-Disposition'] = f'attachment; filename="CSR_Full_Questionnaire_{respondent.application_id}.pdf"'
-#     return response
-
-# def download_section_pdf(request, application_id, section_key):
-#     respondent = get_object_or_404(Respondent, application_id=application_id)
-    
-#     # Check if section exists
-#     if section_key not in SECTION_B_QUESTIONS:
-#         raise Http404("Section not found")
-    
-#     # Check if already downloaded
-#     if section_key in respondent.sections_downloaded:
-#         return HttpResponse(f"Section '{section_key}' has already been downloaded.", status=403)
-    
-#     # Update the sections_downloaded field
-#     downloaded_sections = respondent.sections_downloaded
-#     downloaded_sections[section_key] = True
-#     respondent.sections_downloaded = downloaded_sections
-#     respondent.save()
-    
-#     # Generate PDF content
-#     pdf_content = generate_section_pdf(respondent, section_key)
-    
-#     # Create response with PDF download
-#     response = HttpResponse(pdf_content, content_type='application/pdf')
-#     response['Content-Disposition'] = f'attachment; filename="CSR_{section_key}_{respondent.application_id}.pdf"'
-#     return response
-
 
 def download_full_pdf(request, application_id):
     respondent = get_object_or_404(Respondent, application_id=application_id)
@@ -417,15 +363,32 @@ def download_section_pdf(request, application_id, section_key):
                    section_key=section_key)
 
 
+# def download_trigger(request, application_id, download_type, section_key=None):
+#     respondent = get_object_or_404(Respondent, application_id=application_id)
+#     final_url = reverse('final_page', args=[application_id])
+    
+#     if download_type == 'full':
+#         download_url = reverse('serve_pdf', args=[application_id, 'full'])
+#     else:
+#         download_url = reverse('serve_pdf_section', 
+#                               args=[application_id, 'section', section_key])
+    
+#     return render(request, 'questionnaire/download_trigger.html', {
+#         'download_url': download_url,
+#         'redirect_url': final_url
+#     })
+
 def download_trigger(request, application_id, download_type, section_key=None):
     respondent = get_object_or_404(Respondent, application_id=application_id)
-    final_url = reverse('final_page', args=[application_id])
+    final_url = reverse('final_page', kwargs={'application_id': application_id})
     
     if download_type == 'full':
-        download_url = reverse('serve_pdf', args=[application_id, 'full'])
+        download_url = reverse('serve_pdf', kwargs={'application_id': application_id, 'pdf_type': 'full'})
     else:
         download_url = reverse('serve_pdf_section', 
-                              args=[application_id, 'section', section_key])
+                             kwargs={'application_id': application_id, 
+                                    'pdf_type': 'section', 
+                                    'section_key': section_key})
     
     return render(request, 'questionnaire/download_trigger.html', {
         'download_url': download_url,
@@ -458,12 +421,20 @@ def final_page(request, application_id):
     })
 
 
+
+
+
 def upload_start(request):
     if request.method == 'POST':
         form = UploadVerificationForm(request.POST)
         if form.is_valid():
             application_id = form.cleaned_data['application_id']
-            name = form.cleaned_data['name']
+            name = form.cleaned_data['name'].strip()
+            
+            # First check if application ID exists
+            if not Respondent.objects.filter(application_id=application_id).exists():
+                form.add_error('application_id', "This Application ID does not exist.")
+                return render(request, 'questionnaire/upload_start.html', {'form': form})
             
             try:
                 respondent = Respondent.objects.get(
@@ -472,12 +443,15 @@ def upload_start(request):
                 )
                 request.session['verified_respondent_id'] = str(respondent.id)
                 return redirect('upload_pdf', application_id=application_id)
+                
             except Respondent.DoesNotExist:
-                messages.error(request, "No matching record found. Please check your details.")
+                logger.error(f"Name mismatch for ID {application_id}: Expected name not found")
+                form.add_error('name', "Name does not match our records. Please ensure it matches exactly what you entered in Section A.")
     else:
         form = UploadVerificationForm()
     
     return render(request, 'questionnaire/upload_start.html', {'form': form})
+
 
 def upload_pdf(request, application_id):
     # Check session verification

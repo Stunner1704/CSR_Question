@@ -4,41 +4,52 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-<div class="text-center mb-5">
-    <h1 class="display-4 fw-bold text-primary mb-4">High Level Committee to Review Union-State Relations</h1>
-    <p class="lead text-muted">A comprehensive research questionnaire on Indian federalism</p>
+<!-- Header with TN Government Logo -->
+<div class="d-flex flex-column align-items-center mb-5">
+    <!-- Tamil Nadu Government Logo -->
+    <div class="mb-3">
+        <img src="{% static 'images/tn-govt-logo.png' %}" 
+             alt="Government of Tamil Nadu Logo" 
+             class="img-fluid govt-logo" style="max-height: 80px;">
+    </div>
+    
+    <!-- Committee Title -->
+    <div class="text-center">
+        <h1 class="display-5 fw-bold text-primary mb-2">High Level Committee to Review Union-State Relations</h1>
+        <p class="lead text-muted">A comprehensive research questionnaire on Indian federalism</p>
+    </div>
 </div>
 
+<!-- Registration Card -->
 <div class="card shadow mb-5">
-    <div class="card-body p-5">
+    <div class="card-body p-4 p-md-5">
         <div class="row align-items-center">
             <div class="col-md-6 mb-4 mb-md-0">
                 <img src="{% static 'images/federalism.svg' %}" alt="Federalism Illustration" class="img-fluid">
             </div>
-            <div class="col-md-6">
-                <h2 class="mb-4">About the Study</h2>
-                <p class="mb-4">This questionnaire aims to gather valuable insights about the relationship between the Centre and States in India from experts across various fields.</p>
-                
+            <div class="col-md-6 text-center">
                 <div class="d-grid">
                     <a href="{% url 'section_a' %}" class="btn btn-primary btn-lg py-3 mb-3">
                         <i class="bi bi-person-plus me-2"></i>Registration
                     </a>
+                    <p class="text-muted mt-2">Register to access the questionnaire</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Action Cards -->
 <div class="row g-4">
     <div class="col-md-6">
-        <div class="card h-100 border-primary">
-            <div class="card-body text-center p-4">
-                <div class="mb-4">
-                    <i class="bi bi-file-earmark-text text-primary" style="font-size: 3rem;"></i>
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4 p-lg-5">
+                <div class="icon-container mb-4">
+                    <i class="bi bi-file-earmark-text text-primary"></i>
                 </div>
-                <h3 class="h5">View/Download Questions</h3>
+                <h3 class="h5 mb-3">View/Download Questions</h3>
                 <p class="text-muted mb-4">Access the questionnaire after registration</p>
-                <button class="btn btn-outline-primary w-100" data-bs-toggle="modal" data-bs-target="#mobileVerificationModal">
+                <button class="btn btn-outline-primary w-100 py-2" data-bs-toggle="modal" data-bs-target="#mobileVerificationModal">
                     <i class="bi bi-download me-1"></i>Access Questions
                 </button>
             </div>
@@ -46,14 +57,14 @@
     </div>
     
     <div class="col-md-6">
-        <div class="card h-100 border-success">
-            <div class="card-body text-center p-4">
-                <div class="mb-4">
-                    <i class="bi bi-cloud-upload text-success" style="font-size: 3rem;"></i>
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4 p-lg-5">
+                <div class="icon-container mb-4">
+                    <i class="bi bi-cloud-upload text-success"></i>
                 </div>
-                <h3 class="h5">Submit Your Response</h3>
+                <h3 class="h5 mb-3">Submit Your Response</h3>
                 <p class="text-muted mb-4">Upload your completed questionnaire</p>
-                <a href="{% url 'upload_start' %}" class="btn btn-success w-100">
+                <a href="{% url 'upload_start' %}" class="btn btn-outline-success w-100 py-2">
                     <i class="bi bi-upload me-1"></i>Submit Response
                 </a>
             </div>
@@ -61,7 +72,7 @@
     </div>
 </div>
 
-<!-- Simplified Mobile Verification Modal -->
+<!-- Mobile Verification Modal -->
 <div class="modal fade" id="mobileVerificationModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -103,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
         submitBtn.disabled = true;
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> Verifying...';
         
-        // Submit the form normally (no AJAX needed)
         form.submit();
     });
 });

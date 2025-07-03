@@ -1,6 +1,14 @@
-import uuid
+import random
 from django.db import models
-from uuid import uuid4
+from django.core.exceptions import ValidationError
+from uuid import uuid4  # Add this import back
+
+def generate_application_id():
+    """Generate an 8-digit unique application ID"""
+    while True:
+        app_id = str(random.randint(10000000, 99999999))  # 8-digit number
+        if not Respondent.objects.filter(application_id=app_id).exists():
+            return app_id
 
 class Respondent(models.Model):
     PROFESSION_CHOICES = [
@@ -38,7 +46,7 @@ class Respondent(models.Model):
     profession = models.CharField(max_length=50, choices=PROFESSION_CHOICES)
     specialization = models.CharField(max_length=50, choices=SPECIALIZATION_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
-    application_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    application_id = models.CharField(max_length=8, unique=True, default=generate_application_id, editable=False)
     full_downloaded = models.BooleanField(default=False)
     sections_downloaded = models.JSONField(default=dict, blank=True)
     download_option = models.CharField(
@@ -50,8 +58,11 @@ class Respondent(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.application_id})"
-    
 
+    def clean(self):
+        # Validate application_id is exactly 8 digits
+        if len(self.application_id) != 8 or not self.application_id.isdigit():
+            raise ValidationError("Application ID must be an 8-digit number")
 
 class ResponsePDF(models.Model):
     respondent = models.ForeignKey(Respondent, on_delete=models.CASCADE, related_name='responses')

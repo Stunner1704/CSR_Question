@@ -23,12 +23,13 @@ class RespondentForm(forms.ModelForm):
         self.fields['specialization'].label = "Area of Specialization/Interest"
 
 class UploadVerificationForm(forms.Form):
-    application_id = forms.UUIDField(
+    application_id = forms.CharField(  # Changed from UUIDField to CharField
         label="Application ID",
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'Enter your Application ID'
-        })
+        }),
+        max_length=8
     )
     name = forms.CharField(
         max_length=255,
@@ -38,6 +39,13 @@ class UploadVerificationForm(forms.Form):
         })
     )
 
+    def clean_application_id(self):
+        app_id = self.cleaned_data['application_id'].strip()
+        if not app_id.isdigit() or len(app_id) != 8:
+            raise forms.ValidationError("Application ID must be an 8-digit number.")
+        return app_id
+    
+    
 class ResponseUploadForm(forms.ModelForm):
     class Meta:
         model = ResponsePDF

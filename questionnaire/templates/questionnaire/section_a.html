@@ -10,10 +10,6 @@
     </div>
     
     <div class="card-body p-4 p-md-5">
-        <!-- <div class="progress mb-4">
-            <div class="progress-bar" role="progressbar" style="width: 20%;" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">20%</div>
-        </div> -->
-        
         {% if form.errors %}
         <div class="alert alert-danger">
             <strong>Error:</strong> Please correct the errors below.
@@ -26,7 +22,7 @@
             <h5 class="mb-3 text-primary">Personal Details</h5>
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <label for="{{ form.name.id_for_label }}" class="form-label">Full Name (As in Aadhaar Card)</label>
+                    <label for="id_name" class="form-label">Full Name (As in Aadhaar Card)</label>
                     {% render_field form.name class="form-control" required="required" %}
                     <div class="invalid-feedback">Please provide your name.</div>
                 </div>
@@ -48,13 +44,13 @@
             
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <label for="{{ form.mobile_number.id_for_label }}" class="form-label">Mobile Number</label>
+                    <label for="id_mobile_number" class="form-label">Mobile Number</label>
                     {% render_field form.mobile_number class="form-control" required="required" %}
                     <div class="invalid-feedback">Please provide a valid mobile number.</div>
                 </div>
                 
                 <div class="col-md-6">
-                    <label for="{{ form.email.id_for_label }}" class="form-label">Email (Optional)</label>
+                    <label for="id_email" class="form-label">Email (Optional)</label>
                     {% render_field form.email class="form-control" %}
                 </div>
             </div>
@@ -62,8 +58,39 @@
             <h5 class="mb-3 text-primary mt-5">Professional Details</h5>
             <div class="row g-3 mb-4">
                 <div class="col-md-6">
-                    <label for="{{ form.state.id_for_label }}" class="form-label">State</label>
-                    {% render_field form.state class="form-select" required="required" %}
+                    <label for="id_state" class="form-label">State</label>
+                    <select name="state" id="id_state" class="form-select" required>
+                        <option value="" selected disabled>-- Select State --</option>
+                        <option value="Andhra Pradesh">Andhra Pradesh</option>
+                        <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                        <option value="Assam">Assam</option>
+                        <option value="Bihar">Bihar</option>
+                        <option value="Chhattisgarh">Chhattisgarh</option>
+                        <option value="Goa">Goa</option>
+                        <option value="Gujarat">Gujarat</option>
+                        <option value="Haryana">Haryana</option>
+                        <option value="Himachal Pradesh">Himachal Pradesh</option>
+                        <option value="Jharkhand">Jharkhand</option>
+                        <option value="Karnataka">Karnataka</option>
+                        <option value="Kerala">Kerala</option>
+                        <option value="Madhya Pradesh">Madhya Pradesh</option>
+                        <option value="Maharashtra">Maharashtra</option>
+                        <option value="Manipur">Manipur</option>
+                        <option value="Meghalaya">Meghalaya</option>
+                        <option value="Mizoram">Mizoram</option>
+                        <option value="Nagaland">Nagaland</option>
+                        <option value="Odisha">Odisha</option>
+                        <option value="Punjab">Punjab</option>
+                        <option value="Rajasthan">Rajasthan</option>
+                        <option value="Sikkim">Sikkim</option>
+                        <option value="Tamil Nadu">Tamil Nadu</option>
+                        <option value="Telangana">Telangana</option>
+                        <option value="Tripura">Tripura</option>
+                        <option value="Uttar Pradesh">Uttar Pradesh</option>
+                        <option value="Uttarakhand">Uttarakhand</option>
+                        <option value="West Bengal">West Bengal</option>
+                    </select>
+                    <div class="invalid-feedback">Please select your state.</div>
                 </div>
                 
                 <div class="col-md-6">

@@ -18,33 +18,71 @@
             <p class="lead text-muted">Please verify your identity to upload your response</p>
         </div>
         
-        <form method="post">
+        <form method="post" novalidate>
             {% csrf_token %}
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    <strong>Error:</strong> Please correct the errors below.
+            
+            <!-- Non-field errors -->
+            {% if form.non_field_errors %}
+                <div class="alert alert-danger alert-dismissible fade show">
+                    <strong><i class="bi bi-exclamation-triangle-fill me-2"></i>Verification Error:</strong>
+                    <ul class="my-2 ps-3">
+                        {% for error in form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endif %}
             
+            <!-- Application ID Field -->
             <div class="mb-4">
-                <label for="{{ form.application_id.id_for_label }}" class="form-label fw-bold">
-                    <i class="bi bi-journal me-1"></i> Application ID
+                <label class="form-label fw-bold">
+                    <i class="bi bi-journal-check me-1"></i> Application ID
                 </label>
-                {% render_field form.application_id class="form-control form-control-lg" %}
-                <div class="form-text">You received this ID when you downloaded the questionnaire</div>
+                <div class="input-group">
+                    <span class="input-group-text bg-light">
+                        <i class="bi bi-123 text-primary"></i>
+                    </span>
+                    {% render_field form.application_id class="form-control form-control-lg" placeholder="e.g. 71856914" %}
+                </div>
+                {% if form.application_id.errors %}
+                    <div class="text-danger small mt-1 ps-2">
+                        {% for error in form.application_id.errors %}
+                            <i class="bi bi-arrow-right-short"></i> {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-text ps-2">
+                    <i class="bi bi-info-circle text-primary"></i> You received this 8-digit ID when you downloaded the questionnaire
+                </div>
             </div>
             
+            <!-- Full Name Field -->
             <div class="mb-4">
-                <label for="{{ form.name.id_for_label }}" class="form-label fw-bold">
-                    <i class="bi bi-person me-1"></i> Full Name
+                <label class="form-label fw-bold">
+                    <i class="bi bi-person-badge me-1"></i> Full Name
                 </label>
-                {% render_field form.name class="form-control form-control-lg" %}
-                <div class="form-text">Enter your name exactly as you did in Section A</div>
+                <div class="input-group">
+                    <span class="input-group-text bg-light">
+                        <i class="bi bi-person text-primary"></i>
+                    </span>
+                    {% render_field form.name class="form-control form-control-lg" placeholder="e.g. John Smith" %}
+                </div>
+                {% if form.name.errors %}
+                    <div class="text-danger small mt-1 ps-2">
+                        {% for error in form.name.errors %}
+                            <i class="bi bi-arrow-right-short"></i> {{ error }}<br>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                <div class="form-text text-warning ps-2">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Must match <strong>exactly</strong> what you entered in Section A (including spaces and capitalization)
+                </div>
             </div>
             
             <div class="d-grid mt-5">
-                <button type="submit" class="btn btn-primary btn-lg py-3">
-                    <i class="bi bi-check-circle me-2"></i>Verify and Continue
+                <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold">
+                    <i class="bi bi-shield-check me-2"></i>Verify and Continue
                 </button>
             </div>
         </form>
