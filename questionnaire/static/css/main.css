@@ -424,88 +424,41 @@ footer ul li {
     }
 }
 
-
-/* Logo Styling */
-.govt-logo {
+/* Enhanced Logo Styling */
+.govt-logo-main {
+    max-height: 140px;
+    width: auto;
     transition: transform 0.3s ease;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); /* Stronger shadow */
+    margin-bottom: 1.5rem;
 }
 
-.govt-logo:hover {
-    transform: scale(1.03);
+.govt-logo-main:hover {
+    transform: scale(1.05); /* Slightly stronger hover effect */
 }
 
-/* Icon Containers */
-.icon-container i {
-    font-size: 2.5rem;
-    background: rgba(52, 152, 219, 0.1);
-    width: 80px;
-    height: 80px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: all 0.3s ease;
-}
-
-/* Card Styling */
-.card {
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 12px !important;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
-}
-
-/* Button Styling */
-.btn-outline-primary, .btn-outline-success {
-    border-width: 2px;
-    transition: all 0.3s ease;
-}
-
-.btn-outline-primary:hover {
-    background-color: var(--secondary-color);
-    color: white;
-}
-
-.btn-outline-success:hover {
-    background-color: var(--success-color);
-    color: white;
-}
-
-/* Responsive Adjustments */
+/* Adjustments for smaller screens */
 @media (max-width: 768px) {
-    .display-5 {
-        font-size: 2rem;
+    .govt-logo-main {
+        max-height: 110px;
     }
     
-    .govt-logo {
-        max-height: 60px;
-    }
-    
-    .card-body {
-        padding: 1.25rem;
-    }
-    
-    .icon-container i {
-        width: 70px;
-        height: 70px;
-        font-size: 2rem;
+    .display-4 {
+        font-size: 2.2rem;
     }
 }
 
 @media (max-width: 576px) {
-    .display-5 {
-        font-size: 1.75rem;
+    .govt-logo-main {
+        max-height: 90px;
     }
     
-    .lead {
-        font-size: 1rem;
+    .display-4 {
+        font-size: 1.9rem;
     }
     
-    .card-body {
-        padding: 1rem;
+    .fs-5 {
+        font-size: 1.1rem !important;
     }
 }
+

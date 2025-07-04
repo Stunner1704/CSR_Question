@@ -52,32 +52,32 @@
                         {% endfor %}
                     </div>
                 {% endif %}
-                <div class="form-text ps-2">
+                <!-- <div class="form-text ps-2">
                     <i class="bi bi-info-circle text-primary"></i> You received this 8-digit ID when you downloaded the questionnaire
-                </div>
+                </div> -->
             </div>
             
-            <!-- Full Name Field -->
+            <!-- Mobile Number Field -->
             <div class="mb-4">
                 <label class="form-label fw-bold">
-                    <i class="bi bi-person-badge me-1"></i> Full Name
+                    <i class="bi bi-phone me-1"></i> Mobile Number
                 </label>
                 <div class="input-group">
                     <span class="input-group-text bg-light">
-                        <i class="bi bi-person text-primary"></i>
+                        <i class="bi bi-telephone text-primary"></i>
                     </span>
-                    {% render_field form.name class="form-control form-control-lg" placeholder="e.g. John Smith" %}
+                    {% render_field form.mobile_number class="form-control form-control-lg" placeholder="e.g. 9876543210" %}
                 </div>
-                {% if form.name.errors %}
+                {% if form.mobile_number.errors %}
                     <div class="text-danger small mt-1 ps-2">
-                        {% for error in form.name.errors %}
+                        {% for error in form.mobile_number.errors %}
                             <i class="bi bi-arrow-right-short"></i> {{ error }}<br>
                         {% endfor %}
                     </div>
                 {% endif %}
-                <div class="form-text text-warning ps-2">
-                    <i class="bi bi-exclamation-triangle-fill"></i> Must match <strong>exactly</strong> what you entered in Section A (including spaces and capitalization)
-                </div>
+                <!-- <div class="form-text text-warning ps-2">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Must match the mobile number you used during registration
+                </div> -->
             </div>
             
             <div class="d-grid mt-5">

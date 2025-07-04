@@ -125,7 +125,7 @@ def generate_full_pdf(respondent):
     
     # Title on first page
     p.setFont(title_font, 16)
-    p.drawCentredString(width/2, height-50, "Centre-State Relations Questionnaire - Full")
+    p.drawCentredString(width/2, height-50, "Union-State Relations Questionnaire - Full")
     
     # Respondent info and Application ID
     p.setFont(text_font, 10)
@@ -207,7 +207,7 @@ def generate_full_pdf(respondent):
                 y_position = height - 50
                 # Simplified header for subsequent pages
                 p.setFont(title_font, 16)
-                p.drawCentredString(width/2, y_position, "Centre-State Relations Questionnaire - Full (Continued)")
+                p.drawCentredString(width/2, y_position, "Union-State Relations Questionnaire - Full")
                 y_position -= 50
                 p.setFont(text_font, 10)
                 p.drawString(50, y_position, app_id_text)
@@ -237,7 +237,7 @@ def generate_section_pdf(respondent, section_key):
     
     # Title
     p.setFont(title_font, 16)
-    p.drawCentredString(width/2, height-50, "Centre-State Relations Questionnaire")
+    p.drawCentredString(width/2, height-50, "Union-State Relations Questionnaire")
     
     # Section info
     section_names = {
@@ -421,15 +421,12 @@ def final_page(request, application_id):
     })
 
 
-
-
-
 def upload_start(request):
     if request.method == 'POST':
         form = UploadVerificationForm(request.POST)
         if form.is_valid():
             application_id = form.cleaned_data['application_id']
-            name = form.cleaned_data['name'].strip()
+            mobile_number = form.cleaned_data['mobile_number']
             
             # First check if application ID exists
             if not Respondent.objects.filter(application_id=application_id).exists():
@@ -439,18 +436,19 @@ def upload_start(request):
             try:
                 respondent = Respondent.objects.get(
                     application_id=application_id,
-                    name__iexact=name
+                    mobile_number=mobile_number
                 )
                 request.session['verified_respondent_id'] = str(respondent.id)
                 return redirect('upload_pdf', application_id=application_id)
                 
             except Respondent.DoesNotExist:
-                logger.error(f"Name mismatch for ID {application_id}: Expected name not found")
-                form.add_error('name', "Name does not match our records. Please ensure it matches exactly what you entered in Section A.")
+                form.add_error('mobile_number', "Mobile number does not match our records for this Application ID.")
     else:
         form = UploadVerificationForm()
     
     return render(request, 'questionnaire/upload_start.html', {'form': form})
+
+
 
 
 def upload_pdf(request, application_id):

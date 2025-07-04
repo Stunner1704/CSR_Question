@@ -4,22 +4,21 @@
 {% block title %}Welcome{% endblock %}
 
 {% block content %}
-<!-- Header with TN Government Logo -->
-<div class="d-flex flex-column align-items-center mb-5">
-    <!-- Tamil Nadu Government Logo -->
-    <div class="mb-3">
+<!-- Header with TN Government Logo - Enhanced -->
+<div class="d-flex flex-column align-items-center mb-4"> <!-- Changed mb-5 to mb-4 -->
+    <!-- Tamil Nadu Government Logo - Enhanced Size and Styling -->
+    <div class="mb-4 text-center"> <!-- Increased margin-bottom -->
         <img src="{% static 'images/tn-govt-logo.png' %}" 
              alt="Government of Tamil Nadu Logo" 
-             class="img-fluid govt-logo" style="max-height: 80px;">
+             class="img-fluid govt-logo-main" style="max-height: 140px;"> <!-- Increased max-height -->
     </div>
     
     <!-- Committee Title -->
     <div class="text-center">
-        <h1 class="display-5 fw-bold text-primary mb-2">High Level Committee to Review Union-State Relations</h1>
-        <p class="lead text-muted">A comprehensive research questionnaire on Indian federalism</p>
+        <h1 class="display-4 fw-bold text-primary mb-2">High Level Committee to Review Union-State Relations</h1> <!-- Changed to display-4 -->
+        <p class="fs-5 text-muted">A comprehensive research questionnaire on Indian federalism</p> <!-- Changed to fs-5 -->
     </div>
 </div>
-
 <!-- Registration Card -->
 <div class="card shadow mb-5">
     <div class="card-body p-4 p-md-5">
